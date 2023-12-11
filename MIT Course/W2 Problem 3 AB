@@ -1,0 +1,30 @@
+
+import Pkg
+Pkg.add("JuMP")
+Pkg.add("GLPK")
+
+using JuMP
+using GLPK
+
+# Define the model
+m = Model(GLPK.Optimizer)
+
+# Create variables
+@variable(m, x >= 0)
+@variable(m, y >= 0)
+
+# Add constraints
+@constraint(m, 3x + 6y >= 30)
+@constraint(m, 6x + 2y >= 20)
+@constraint(m, x + 2y >= 12)
+
+# Set objective
+@objective(m, Min, 2x + 3y)
+
+# Solve the optimization problem
+optimize!(m)
+
+# Display the results
+println("Objective Value: ", objective_value(m))
+println("Optimal x: ", value(x))
+println("Optimal y: ", value(y))
